@@ -21,12 +21,13 @@ def getoldest(): #renew dates and return page id and post date
     for i in range(32):
         print('Reading %s page...' % i) #debug
         if i == 0:
-            req = urllib2.Request('http://cnbeta.com/')
+            req = urllib2.Request('http://cnbeta.com/') # Home page
+        elif i <= 5:
+            req = urllib2.Request('http://cnbeta.com/newread.php?page=%s' % i, None, header) # auto next page
         else:
-            req = urllib2.Request('http://cnbeta.com/newread.php?page=%s' % i, None, header)
+            req = urllib2.Request('http://cnbeta.com/storydata.php?pageID=%s' % ( i - 4 ), None, header ) # hard next page
         html = urllib2.urlopen(req).read().decode('gb2312', 'ignore')
-        id = 0
-
+        
         mblocks = re_block.finditer(html)
         for mblock in mblocks:
             html = mblock.group(0)
@@ -62,11 +63,11 @@ def decode(html): # decode HTML entity
     return html
 
 def saveit(c, id): #SQL cursor, page id
-    re_all = re.compile(r'\<dl\>[\s\S]*?\</dl\>') #所有留言
-    re_name = re.compile(ur'\x09.*? 发表于 ') #发布者姓名
-    re_time = re.compile(ur'(?<=发表于 ).{19}(?=\</span\>\</dt\>)') #发布时间
+    re_all     = re.compile(r'\<dl\>[\s\S]*?\</dl\>') #所有留言
+    re_name    = re.compile(ur'\x09.*? 发表于 ') #发布者姓名
+    re_time    = re.compile(ur'(?<=发表于 ).{19}(?=\</span\>\</dt\>)') #发布时间
     re_content = re.compile(ur're_detail"\>\n\x09   [\s\S]*?\</dd\>') #留言内容
-    re_updown = re.compile(r'"\>\d{1,5}\</span\>') #支持/反对数
+    re_updown  = re.compile(r'"\>\d{1,5}\</span\>') #支持/反对数
     sql = "INSERT INTO cnbeta_cbhcomment (sid, ranking, name, time, content, up, down) VALUES (%s,%s,%s,%s,%s,%s,%s)" 
     
     print('Saving %s ...' % id)
