@@ -7,10 +7,6 @@ import MySQLdb as mdb
 
 dates = dict() #page id:post date
 
-def update():
-    dates.clear()
-    getoldest()
-
 def getoldest(): #renew dates and return page id and post date
     header   = {'Referer':'http://cnbeta.com/', 'X-Requested-With':'XMLHttpRequest'}
     re_block = re.compile(r'<dt class="topic" ><a href="/articles/\d{6,7}\.htm[\s\S]+?\|')
@@ -46,10 +42,11 @@ def getoldest(): #renew dates and return page id and post date
                 dates[id] = date
                 #print(id, date) #debug
 
-def getnext(since): #return page id and post date
+def getnext(since): # return page id and post date
     if len(dates) < 16:
-        updatearts()
-        
+        dates.clear() # update id-date list
+        getoldest()
+
     for id in range(since + 1, since + 64):
         if id in dates:
             return id, dates[id]
