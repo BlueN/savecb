@@ -71,9 +71,10 @@ def saveit(c, id): #SQL cursor, page id
     sql = "INSERT INTO cnbeta_cbhcomment (sid, ranking, name, time, content, up, down) VALUES (%s,%s,%s,%s,%s,%s,%s)" 
     
     print('Saving %s ...' % id)
-    rsp = urllib2.urlopen('http://www.cnbeta.com/comment/g_content/%s.html' % id)
-    if rsp.getcode() != 200:
-        print("Waring: HTTP-%s" % rsp.getcode())
+    try:
+        rsp = urllib2.urlopen('http://www.cnbeta.com/comment/g_content/%s.html' % id)
+    except urllib2.HTTPError, e:
+        print("Waring: HTTP-%s" % e.code)
         return
     html = rsp.read().decode('utf-8','ignore')
     comments = re_all.findall(html)
