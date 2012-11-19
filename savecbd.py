@@ -110,6 +110,7 @@ def main():
             print('Sleep %ss for %s' % (stime.total_seconds(), id))
             time.sleep(stime.total_seconds())
         saveit(c, id)
+        conn.ping(True)
         conn.commit()
         del dates[id]
         id, date = getnext(id)
