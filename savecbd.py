@@ -49,9 +49,12 @@ def update_post_list():
 
 def saveit(sid, c):
     logging.info('Saving %s...' % sid)
-    json = requests.get(COMMENTS_URL % sid).json()
-    comments = json['result']['cmntstore']
-    hot_comments = [comments[h['tid']] for h in json['result']['hotlist']]
+    result = requests.get(COMMENTS_URL % sid).json()['result']
+    if 'cmntstore' not in result:
+        logging.info('No comment found.')
+        return
+    comments = result['cmntstore']
+    hot_comments = [comments[h['tid']] for h in result['hotlist']]
 
     ranking = 0
     for hc in hot_comments:
