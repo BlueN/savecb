@@ -85,7 +85,7 @@ def main():
         if sleep_time > timedelta(minutes=3):
             logging.info('Sleep %s min for %s.' \
                          % (sleep_time.total_seconds() // 60, sid))
-            time.sleep(sleep_time.total_seconds() - 60)
+            time.sleep(sleep_time.total_seconds() - 120)
             conn.ping(True)  # Ensure MySQL connected.
         saveit(sid, c)
         conn.commit()
