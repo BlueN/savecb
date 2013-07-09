@@ -12,12 +12,13 @@ import MySQLdb
 MYSQL_HOST = 'localhost'
 MYSQL_USERNAME = ''
 MYSQL_PASSWORD = ''
-MYSQL_TABLE = 'savecb'
+MYSQL_DATABASE = 'savecb'
+MYSQL_TABLE = 'cnbeta_cbhcomment'
 LOGFILE = '/var/log/savecbd.log'
 
 MORE_PAGE_URL = 'http://www.cnbeta.com/more.htm?type=all&page=%s'
 COMMENTS_URL = 'http://www.cnbeta.com/comment.htm?op=info&page=1&sid=%s'
-INSERT_HC_SQL = "INSERT INTO cnbeta_cbhcomment (sid, ranking, name, time, \
+INSERT_HC_SQL = "INSERT INTO " + MYSQL_TABLE + " (sid, ranking, name, time, \
                  content, up, down) VALUES (%s,%s,%s,%s,%s,%s,%s)"
 
 posts = []  # A heap of [(sid, time), ...]
@@ -69,7 +70,7 @@ def main():
                     filename=LOGFILE,
                     filemode='a+')
     conn = MySQLdb.connect(MYSQL_HOST, MYSQL_USERNAME, MYSQL_PASSWORD,
-                           MYSQL_TABLE, charset='utf8')
+                           MYSQL_DATABASE, charset='utf8')
     c = conn.cursor()
     while True:
         if not posts:
