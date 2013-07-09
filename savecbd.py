@@ -75,7 +75,7 @@ def main():
     while True:
         if not posts:
             update_post_list()
-            if not posts:
+            if not posts:  # Some errors occurred or no post at last 24 hours.
                 time.sleep(600)
                 continue
         sid, post_time = heapq.heappop(posts)
