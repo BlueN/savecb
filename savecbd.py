@@ -50,7 +50,7 @@ def saveit(sid, c):
     logging.info('Saving %s...' % sid)
     result = requests.get(COMMENTS_URL % sid).json()['result']
     if 'cmntstore' not in result:
-        logging.info('No comment found.')
+        logging.warn('No comment found.')
         return
     comments = result['cmntstore']
     hot_comments = [comments[h['tid']] for h in result['hotlist']]
