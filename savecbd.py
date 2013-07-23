@@ -34,7 +34,7 @@ def update_post_list():
     while not found_bottom:
         page += 1  # Start form page 1
         json = requests.get(MORE_PAGE_URL % page).json()
-        for p in json['result']:
+        for p in json['result']['list']:
             sid = int(p['sid'])
             t = datetime.strptime(p['time'], '%Y-%m-%d %H:%M:%S')
             if sid <= max_sid or datetime.now() - t >= timedelta(days=1):
